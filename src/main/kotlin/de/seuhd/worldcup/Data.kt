@@ -12,23 +12,39 @@ data class WorldCupData(
 @Serializable
 data class Group(
    //TODO
-    val todo: String,
+    val name: String,
+    val teams: List<Team>,
+    val matches: List<Match>
 )
 
 @Serializable
 data class Team(
     //TODO
-    val todo: String,
+    val id: String,
+    val name: String
 )
 
 @Serializable
 data class Match(
     //TODO
-    val todo: String,
+    val matchId: Int,
+    val round: String,
+    val date: String,
+    val homeTeam: String,
+    val homeScore: Int?,
+    val awayScore: Int?,
+    val groung: String
 )
 
 @Serializable
 data class Knockout(
     //TODO
-    val todo: String,
+    val matchId: Int,
+    val round: String,
+    val date: String,
+    val homePlaceholder: String,
+    val awayPlaceholder: String,
+    val homeScroe: Int?,
+    val awayScore: Int?,
+    val ground: String
 )

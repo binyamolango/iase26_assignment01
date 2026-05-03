@@ -1,7 +1,10 @@
 package de.seuhd.worldcup
 
+
 fun main() {
     //TODO: Load JSON data
+    val jsonData = object {}.javaClass
+        .getResourceAs
     //TODO: Implement interactive menu
 }
 
