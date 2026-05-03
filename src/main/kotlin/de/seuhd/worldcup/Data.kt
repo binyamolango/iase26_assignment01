@@ -26,14 +26,14 @@ data class Team(
 
 @Serializable
 data class Match(
-    //TODO
     val matchId: Int,
     val round: String,
     val date: String,
     val homeTeam: String,
+    val awayTeam: String,
     val homeScore: Int?,
     val awayScore: Int?,
-    val groung: String
+    val ground: String
 )
 
 @Serializable
@@ -44,7 +44,7 @@ data class Knockout(
     val date: String,
     val homePlaceholder: String,
     val awayPlaceholder: String,
-    val homeScroe: Int?,
+    val homeScore: Int?,
     val awayScore: Int?,
     val ground: String
 )
