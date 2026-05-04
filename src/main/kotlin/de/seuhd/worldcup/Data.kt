@@ -11,7 +11,6 @@ data class WorldCupData(
 
 @Serializable
 data class Group(
-   //TODO
     val name: String,
     val teams: List<Team>,
     val matches: List<Match>
@@ -19,7 +18,6 @@ data class Group(
 
 @Serializable
 data class Team(
-    //TODO
     val id: String,
     val name: String
 )
@@ -38,7 +36,6 @@ data class Match(
 
 @Serializable
 data class Knockout(
-    //TODO
     val matchId: Int,
     val round: String,
     val date: String,

@@ -9,6 +9,7 @@ fun main() {
         ?.use { it.readText() }
         ?: error("Could not load world_cup_2026_full_data.json")
 
+    // convert the JSON text into Kotlin objects
     val worldCupData = Json.decodeFromString<WorldCupData>(jsonText)
 
     //TODO: Implement interactive menu
@@ -111,7 +112,7 @@ private fun printGroupStanding(group: Group) {
         away.goalsFor += awayScore
         away.goalsAgainst += homeScore
 
-        // add win, loss, draw, and pints
+        // add win, loss, draw, and points based on the result.
         when {
             homeScore > awayScore -> {
                 home.wins++
@@ -145,7 +146,7 @@ private fun printGroupStanding(group: Group) {
     println(group.name)
     println("Team                 P  W  D  L  GF  GA  GD  Pts")
 
-    // Print the final table.
+    // print the final table
     for (standing in sortedStandings) {
         println(
             "${standing.teamName.padEnd(20)} " +
@@ -164,8 +165,51 @@ private fun printGroupStanding(group: Group) {
 /* -------------------------------------------------------------
    2) Show Matches
    ------------------------------------------------------------- */
+private fun readGroup(allGroups: List<Group>, prompt: String): Group? {
+    println(prompt)
+    val input = readln()
+
+    val group = allGroups.find { it.name.equals(input, ignoreCase = true) }
+    if (group == null) {
+        println("Group not found.")
+    }
+
+    return group
+}
+
+private fun teamNameById(group: Group): Map<String, String> =
+    group.teams.associate { it.id to it.name }
+
 private fun showMatches(allGroups: List<Group>) {
     //TODO
+    val group = readGroup(
+        allGroups,
+        "Which group's matches do you want to see? Example: 'Group A'"
+    ) ?: return
+
+    val teamNames = teamNameById(group)
+
+    println()
+    println("${group.name} Matches")
+    println("Date         Home Team              Score     Away Team              Ground")
+
+    for (match in group.matches) {
+        val homeTeam = teamNames[match.homeTeam] ?: match.homeTeam
+        val awayTeam = teamNames[match.awayTeam] ?: match.awayTeam
+        val score = if (match.homeScore == null || match.awayScore == null) {
+            "TBD"
+        } else {
+            "${match.homeScore} - ${match.awayScore}"
+        }
+
+        println(
+            "${match.date.padEnd(12)} " +
+                    "${homeTeam.padEnd(22)} " +
+                    "${score.padEnd(9)} " +
+                    "${awayTeam.padEnd(22)} " +
+                    match.ground
+        )
+    }
 }
 
 /* -------------------------------------------------------------
