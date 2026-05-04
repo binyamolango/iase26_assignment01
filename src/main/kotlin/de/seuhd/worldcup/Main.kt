@@ -215,8 +215,67 @@ private fun showMatches(allGroups: List<Group>) {
 /* -------------------------------------------------------------
    3) Place Bets
    ------------------------------------------------------------- */
+enum class MatchOutcome {
+    HOME_WIN,
+    AWAY_WIN,
+    DRAW
+}
+
+data class Bet(
+    val matchId: Int,
+    val outcome: MatchOutcome
+)
+
+private val placedBets = mutableMapOf<Int, Bet>()
+
+internal fun matchOutcome(homeScore: Int?, awayScore: Int?): MatchOutcome? {
+    // A match without both scores has not been played yet.
+    if (homeScore == null || awayScore == null) return null
+
+    return when {
+        homeScore > awayScore -> MatchOutcome.HOME_WIN
+        homeScore < awayScore -> MatchOutcome.AWAY_WIN
+        else -> MatchOutcome.DRAW
+    }
+}
+
 private fun placeBets(allGroups: List<Group>) {
     //TODO
+    val group = readGroup(
+        allGroups,
+        "Which group do you want to bet on? Example: 'Group A'"
+    ) ?: return
+
+    val teamNames = teamNameById(group)
+
+    println("Enter your tip for each match: 1 = Home Win, 2 = Away Win, 0 = Draw")
+
+    for (match in group.matches) {
+        val homeTeam = teamNames[match.homeTeam] ?: match.homeTeam
+        val awayTeam = teamNames[match.awayTeam] ?: match.awayTeam
+
+        while (true) {
+            print("${match.date}: $homeTeam vs $awayTeam - your tip: ")
+
+            val outcome = when (readln()) {
+                "1" -> MatchOutcome.HOME_WIN
+                "2" -> MatchOutcome.AWAY_WIN
+                "0" -> MatchOutcome.DRAW
+                else -> {
+                    println("Invalid tip. Please enter 1, 2, or 0.")
+                    null
+                }
+            }
+
+            if (outcome != null) {
+                // Store by match id so a later bet for the same match replaces the old one.
+                placedBets[match.matchId] = Bet(match.matchId, outcome)
+                break
+            }
+        }
+    }
+
+    println("Bets saved for ${group.name}.")
 }
 
 /* -------------------------------------------------------------
