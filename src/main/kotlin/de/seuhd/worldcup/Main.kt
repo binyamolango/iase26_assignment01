@@ -283,4 +283,46 @@ private fun placeBets(allGroups: List<Group>) {
    ------------------------------------------------------------- */
 private fun showBettingScore(allGroups: List<Group>) {
     //TODO
+    if (placedBets.isEmpty()) {
+        println("No bets placed yet.")
+        return
+    }
+
+    var correct = 0
+    var incorrect = 0
+    var open = 0
+
+    println()
+    println("Betting Score")
+
+    for (group in allGroups) {
+        val teamNames = teamNameById(group)
+
+        for (match in group.matches) {
+            val bet = placedBets[match.matchId] ?: continue
+            val actualOutcome = matchOutcome(match.homeScore, match.awayScore)
+            val homeTeam = teamNames[match.homeTeam] ?: match.homeTeam
+            val awayTeam = teamNames[match.awayTeam] ?: match.awayTeam
+
+            if (actualOutcome == null) {
+                open++
+                println("${group.name}: $homeTeam vs $awayTeam - not played yet")
+                continue
+            }
+
+            if (bet.outcome == actualOutcome) {
+                correct++
+                println("${group.name}: $homeTeam vs $awayTeam - correct")
+            } else {
+                incorrect++
+                println("${group.name}: $homeTeam vs $awayTeam - incorrect")
+            }
+        }
+    }
+
+    println()
+    println("Total score: $correct")
+    println("Correct predictions: $correct")
+    println("Incorrect predictions: $incorrect")
+    println("Open matches: $open")
 }
