@@ -2,11 +2,17 @@ package de.seuhd.worldcup
 
 import kotlin.test.*
 
-class StandingsServiceTest {
+class StandingTest {
 
     @Test
-    fun `calculate standings for a simple group`() {
-        //TODO
-        assertEquals(0, 0)
+    fun `calculate goal difference for standing`() {
+        val standing = Standing(
+            teamId = "A",
+            teamName = "Alpha",
+            goalsFor = 5,
+            goalsAgainst = 2
+        )
+
+        assertEquals(3, standing.goalDifference)
     }
 }
